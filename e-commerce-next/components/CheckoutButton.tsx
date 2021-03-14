@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import { loadStripe } from '@stripe/stripe-js';
 
 import stripeConfig from '../config/stripe';

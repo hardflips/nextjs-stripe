@@ -1,6 +1,9 @@
 import { GetStaticProps } from 'next';
-import Stripe from 'stripe';
+import { useState } from 'react';
+import Router, { useRouter } from 'next/router';
+import Image from 'next/image';
 import styled from 'styled-components';
+import Stripe from 'stripe';
 import stripeConfig from '../config/stripe';
 
 import {
@@ -14,6 +17,7 @@ import {
   CardActions,
   CardContent,
   CardActionArea,
+  LinearProgress,
 } from '@material-ui/core';
 
 
@@ -26,7 +30,7 @@ const ProductsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
+  flex-direction: column;
 `;
 
 const CardStyled = styled(Card)`
@@ -44,6 +48,14 @@ const CardMediaStyled = styled(CardMedia)`
 
 const StepperStyled = styled(Stepper)`
   margin: 32px;
+`;
+
+const LinearProgressWrapper = styled.div`
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 999;
 `;
 
 interface Props {
@@ -65,6 +77,14 @@ export const getStaticProps: GetStaticProps = async () => {
 }
 
 const Home: React.FC<Props> = ({ products }) => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const showLoading = () => {
+    setLoading(true);
+  };
+
+  Router.events.on('routeChangeStart', showLoading);
 
   const steps = [
     {
@@ -83,6 +103,11 @@ const Home: React.FC<Props> = ({ products }) => {
 
   return (
     <MainContent>
+      {loading && (
+        <LinearProgressWrapper>
+          <LinearProgress />
+        </LinearProgressWrapper>
+      )}
       <StepperStyled>
         {steps.map((item) => {
           return (
@@ -103,9 +128,16 @@ const Home: React.FC<Props> = ({ products }) => {
                   return (
                     <CardMediaStyled
                       key={src}
-                      image={src}
                       title={product.name}
-                    />
+                    >
+                      <Image
+                        key={src}
+                        src={src}
+                        alt={product.name}
+                        width={400}
+                        height={520}
+                      />
+                    </CardMediaStyled>
                   )
                 })}
                 <CardContent>
@@ -123,7 +155,7 @@ const Home: React.FC<Props> = ({ products }) => {
                 <Button
                   size="small"
                   color="primary"
-                  onClick={() => { window.location.href = `/${product.id}` }}
+                  onClick={() => { router.push(`/produto/${product.id}`); }}
                 >
                   Ver detalhes
                 </Button>

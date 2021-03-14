@@ -1,10 +1,10 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
-import Image from 'next/image'
+import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
 import Stripe from 'stripe';
 
-import stripeConfig from '../config/stripe';
+import stripeConfig from '../../config/stripe';
 
 import {
   Card,
@@ -15,7 +15,7 @@ import {
   CardContent,
 } from '@material-ui/core';
 
-import CheckoutButton from '../components/CheckoutButton';
+import CheckoutButton from '../../components/CheckoutButton';
 
 
 const MainContent = styled.div`
@@ -67,8 +67,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }));
 
   return {
-    paths: paths,
-    fallback: false,
+    paths,
+    fallback: 'blocking',
   }
 }
 
@@ -118,54 +118,56 @@ const Product: React.FC<Props> = ({ product, price }) => {
           );
         })}
       </StepperStyled>
-      <ProductContent>
-        <ProductBlock>
-          {product.images.map((src) => {
-            return (
-              <Image
-                key={src}
-                src={src}
-                alt={product.name}
-                width={400}
-                height={520}
-              />
-            )
-          })}
-        </ProductBlock>
-        <ProductBlock>
-          <CardStyled>
-            <CardContent>
-              {price.nickname && (
+      {product && (
+        <ProductContent>
+          <ProductBlock>
+            {product.images.map((src) => {
+              return (
+                <Image
+                  key={src}
+                  src={src}
+                  alt={product.name}
+                  width={400}
+                  height={520}
+                />
+              )
+            })}
+          </ProductBlock>
+          <ProductBlock>
+            <CardStyled>
+              <CardContent>
+                {price.nickname && (
+                  <Typography variant="body2" color="textSecondary" component="p" gutterBottom>
+                    {price.nickname}
+                  </Typography>
+                )}
                 <Typography variant="body2" color="textSecondary" component="p" gutterBottom>
-                  {price.nickname}
+                  Atualizado: {new Date(product.updated * 1000).toLocaleDateString('pt-BR')}
                 </Typography>
-              )}
-              <Typography variant="body2" color="textSecondary" component="p" gutterBottom>
-                Atualizado: {new Date(product.updated * 1000).toLocaleDateString('pt-BR')}
-              </Typography>
-              <Typography color="primary" gutterBottom variant="h5">
-                {product.name}
-              </Typography>
-              <br />
-              <Typography variant="body2" component="p">
-                {product.description}
-              </Typography>
-            </CardContent>
-          </CardStyled>
-          <Typography color="textSecondary">
-            Preço:
-          </Typography>
-          <Typography color="primary" variant="h4">
-            R$ {(price.unit_amount / 100).toFixed(2).replace('.', ',')}
-          </Typography>
-          <ButtonWrapper>
-            <CheckoutButton
-              priceId={price.id}
-              itemName={product.name}
-            />
-          </ButtonWrapper>
-        </ProductBlock>
-      </ProductContent>
+                <Typography color="primary" gutterBottom variant="h5">
+                  {product.name}
+                </Typography>
+                <br />
+                <Typography variant="body2" component="p">
+                  {product.description}
+                </Typography>
+              </CardContent>
+            </CardStyled>
+            <Typography color="textSecondary">
+              Preço:
+            </Typography>
+            <Typography color="primary" variant="h4">
+              R$ {(price.unit_amount / 100).toFixed(2).replace('.', ',')}
+            </Typography>
+            <ButtonWrapper>
+              <CheckoutButton
+                priceId={price.id}
+                itemName={product.name}
+              />
+            </ButtonWrapper>
+          </ProductBlock>
+        </ProductContent>
+      )}
     </MainContent>
   )
 }
