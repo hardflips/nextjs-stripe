@@ -13,7 +13,6 @@ const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_KEY);
 const CheckoutButton: React.FC<Props> = ({ priceId, itemName }) => {
 
   async function handleClick() {
-    const isProd = process.env.NODE_ENV === 'production';
     const stripe = await stripePromise;
     const { error } = await stripe.redirectToCheckout({
       lineItems: [
@@ -23,8 +22,8 @@ const CheckoutButton: React.FC<Props> = ({ priceId, itemName }) => {
         }
       ],
       mode: 'payment',
-      successUrl: `${isProd ? process.env.BASE_URL : 'http://localhost:3000'}/success?itemName=${itemName}`,
-      cancelUrl: `${isProd ? process.env.BASE_URL : 'http://localhost:3000'}/cancel`,
+      successUrl: `${process.env.BASE_URL}/success?itemName=${itemName}`,
+      cancelUrl: `${process.env.BASE_URL}/cancel`,
     });
     if (error) {
       console.log(error);
