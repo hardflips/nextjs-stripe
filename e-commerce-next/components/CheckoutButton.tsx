@@ -22,8 +22,8 @@ const CheckoutButton: React.FC<Props> = ({ priceId, itemName }) => {
         }
       ],
       mode: 'payment',
-      successUrl: `https://${process.env.VERCEL_URL}/success?itemName=${itemName}`,
-      cancelUrl: `https://${process.env.VERCEL_URL}/cancel`,
+      successUrl: `${process.env.BASE_URL}/success?itemName=${itemName}`,
+      cancelUrl: `${process.env.BASE_URL}/cancel`,
     });
     if (error) {
       console.log(error);
