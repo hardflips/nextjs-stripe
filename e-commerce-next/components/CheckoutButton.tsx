@@ -8,7 +8,7 @@ interface Props {
   itemName: string;
 }
 
-const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_KEY);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
 const CheckoutButton: React.FC<Props> = ({ priceId, itemName }) => {
 
@@ -22,8 +22,8 @@ const CheckoutButton: React.FC<Props> = ({ priceId, itemName }) => {
         }
       ],
       mode: 'payment',
-      successUrl: `${process.env.BASE_URL}/success?itemName=${itemName}`,
-      cancelUrl: `${process.env.BASE_URL}/cancel`,
+      successUrl: `http://${process.env.NEXT_PUBLIC_BASE_URL}/success?itemName=${itemName}`,
+      cancelUrl: `http://${process.env.NEXT_PUBLIC_BASE_URL}/cancel`,
     });
     if (error) {
       console.log(error);
