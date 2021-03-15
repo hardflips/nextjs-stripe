@@ -1,20 +1,19 @@
 import React from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 
-import stripeConfig from '../config/stripe';
-
 import { Button } from '@material-ui/core';
 import { AddShoppingCart } from '@material-ui/icons';
-
-const stripePromise = loadStripe(stripeConfig.publicKey);
-
 interface Props {
   priceId: string;
   itemName: string;
 }
 
+const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_KEY);
+
 const CheckoutButton: React.FC<Props> = ({ priceId, itemName }) => {
+
   async function handleClick() {
+    const isProd = process.env.NODE_ENV === 'production';
     const stripe = await stripePromise;
     const { error } = await stripe.redirectToCheckout({
       lineItems: [
@@ -24,8 +23,8 @@ const CheckoutButton: React.FC<Props> = ({ priceId, itemName }) => {
         }
       ],
       mode: 'payment',
-      successUrl: `http://localhost:3000/success?itemName=${itemName}`,
-      cancelUrl: `http://localhost:3000/cancel`,
+      successUrl: `${isProd ? process.env.BASE_URL : 'http://localhost:3000'}/success?itemName=${itemName}`,
+      cancelUrl: `${isProd ? process.env.BASE_URL : 'http://localhost:3000'}/cancel`,
     });
     if (error) {
       console.log(error);

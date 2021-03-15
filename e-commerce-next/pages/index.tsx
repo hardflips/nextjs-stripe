@@ -4,7 +4,6 @@ import Router, { useRouter } from 'next/router';
 import Image from 'next/image';
 import styled from 'styled-components';
 import Stripe from 'stripe';
-import stripeConfig from '../config/stripe';
 
 import {
   Card,
@@ -63,7 +62,7 @@ interface Props {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const stripe = new Stripe(stripeConfig.secretKey, {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: '2020-08-27',
   });
 

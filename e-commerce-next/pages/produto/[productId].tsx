@@ -4,8 +4,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Stripe from 'stripe';
 
-import stripeConfig from '../../config/stripe';
-
 import {
   Card,
   Step,
@@ -54,7 +52,7 @@ interface Props {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const stripe = new Stripe(stripeConfig.secretKey, {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: '2020-08-27',
   });
 
@@ -73,7 +71,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const stripe = new Stripe(stripeConfig.secretKey, {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: '2020-08-27',
   });
 
