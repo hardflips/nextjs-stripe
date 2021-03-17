@@ -14,8 +14,6 @@
     "@stripe/stripe-js": "^1.13.1",
     "@types/material-ui": "^0.21.8",
     "@types/styled-components": "^5.1.8",
-    "@types/styled-components-react-native": "^5.1.1",
-    "babel-plugin-styled-components": "^1.12.0",
     "dotenv": "^8.2.0",
     "dotenv-load": "^2.0.0",
     "next": "10.0.8",

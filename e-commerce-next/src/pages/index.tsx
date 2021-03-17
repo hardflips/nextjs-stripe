@@ -1,4 +1,5 @@
 import { GetStaticProps } from 'next';
+import Head from 'next/head';
 import { useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -140,11 +141,11 @@ const Home: React.FC<Props> = ({ products }) => {
                   )
                 })}
                 <CardContent>
-                  <Typography gutterBottom variant="h5">
+                  <Typography gutterBottom variant="h5" color="primary" component="span">
                     {product.name}
                   </Typography>
                   <CardDescription>
-                    <Typography variant="body2" color="textSecondary">
+                    <Typography variant="body2" color="textSecondary" component="span">
                       {product.description}
                     </Typography>
                   </CardDescription>
