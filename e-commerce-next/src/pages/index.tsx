@@ -1,10 +1,8 @@
 import { GetStaticProps } from 'next';
-import Head from 'next/head';
-import { useState } from 'react';
-import Router, { useRouter } from 'next/router';
 import Image from 'next/image';
 import styled from 'styled-components';
 import Stripe from 'stripe';
+import axios from 'axios';
 
 import {
   Card,
@@ -17,7 +15,6 @@ import {
   CardActions,
   CardContent,
   CardActionArea,
-  LinearProgress,
 } from '@material-ui/core';
 
 
@@ -49,43 +46,21 @@ const CardMediaStyled = styled(CardMedia)`
 const StepperStyled = styled(Stepper)`
   margin: 32px;
 `;
-
-const LinearProgressWrapper = styled.div`
-  position: fixed;
-  width: 100%;
-  top: 0;
-  left: 0;
-  z-index: 999;
-`;
-
 interface Props {
   products: Stripe.Product[];
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: '2020-08-27',
-  });
-
-  const products = await stripe.products.list();
+  const response = await axios.get(`http://${process.env.NEXT_PUBLIC_BASE_URL}/api/products`);
 
   return {
     props: {
-      products: products.data,
+      products: response.data.list,
     }
   }
 }
 
 const Home: React.FC<Props> = ({ products }) => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-
-  const showLoading = () => {
-    setLoading(true);
-  };
-
-  Router.events.on('routeChangeStart', showLoading);
-
   const steps = [
     {
       label: 'Catálogo de produtos',
@@ -103,11 +78,6 @@ const Home: React.FC<Props> = ({ products }) => {
 
   return (
     <MainContent>
-      {loading && (
-        <LinearProgressWrapper>
-          <LinearProgress />
-        </LinearProgressWrapper>
-      )}
       <StepperStyled>
         {steps.map((item) => {
           return (
@@ -118,7 +88,7 @@ const Home: React.FC<Props> = ({ products }) => {
         })}
       </StepperStyled>
       <ProductsWrapper>
-        {products.map((product, i) => {
+        {products && products.map((product: Stripe.Product, i: number) => {
           return (
             <CardStyled
               key={product.id}
@@ -155,7 +125,7 @@ const Home: React.FC<Props> = ({ products }) => {
                 <Button
                   size="small"
                   color="primary"
-                  onClick={() => { router.push(`/produto/${product.id}`); }}
+                  onClick={() => { window.location.href = `/produto/${product.id}` }}
                 >
                   Ver detalhes
                 </Button>
