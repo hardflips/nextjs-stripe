@@ -1,7 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import Stripe from 'stripe';
 
-
 export default async (request: VercelRequest, response: VercelResponse) => {
   const { productId } = request.body;
 
