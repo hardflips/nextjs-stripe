@@ -22,11 +22,6 @@ import {
 } from '@material-ui/core';
 
 
-const MainContent = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 const ProductsWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -157,7 +152,6 @@ const Home: React.FC<Props> = ({ products }) => {
                             <Button
                               size="small"
                               color="primary"
-                              // onClick={() => { router.push(`/produto/${product.id}`); }}
                               onClick={() => { window.location.href = `/produto/${product.id}` }}
                             >
                               Ver detalhes
