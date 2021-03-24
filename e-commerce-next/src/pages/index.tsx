@@ -1,7 +1,8 @@
 import { GetStaticProps } from 'next';
 import { useState } from 'react';
-import Router, { useRouter } from 'next/router';
+import Router from 'next/router';
 import Image from 'next/image';
+import Link from 'next/link'
 import styled from 'styled-components';
 import Stripe from 'stripe';
 
@@ -60,11 +61,10 @@ export const getStaticProps: GetStaticProps = async () => {
 }
 
 const Home: React.FC<Props> = ({ products }) => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [loading, setIsLoading] = useState(false);
 
   const showLoading = () => {
-    setLoading(true);
+    setIsLoading(true);
   };
 
   Router.events.on('routeChangeStart', showLoading);
@@ -149,13 +149,14 @@ const Home: React.FC<Props> = ({ products }) => {
                             </CardContent>
                           </CardActionArea>
                           <CardActions>
-                            <Button
-                              size="small"
-                              color="primary"
-                              onClick={() => { window.location.href = `/produto/${product.id}` }}
-                            >
-                              Ver detalhes
-                            </Button>
+                            <Link href={`/produto/${product.id}`}>
+                              <Button
+                                size="small"
+                                color="primary"
+                              >
+                                Ver detalhes
+                              </Button>
+                            </Link>
                           </CardActions>
                         </Card>
                         <br />
